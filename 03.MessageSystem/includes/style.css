@@ -1,0 +1,24 @@
+/* 
+    Document   : style
+    Created on : Oct 4, 2013, 10:30:04 PM
+    Author     : Yana
+    Description:
+        Purpose of the stylesheet follows.
+*/
+.list {
+   padding-left: 400px; 
+   border: 1px solid green;
+   border-collapse:collapse;
+   width: 100%;
+   text-align:center;
+}
+.error{
+    color:red;
+}
+p.msg{
+   text-align: justify; 
+}
+root { 
+    display: block;
+}
+

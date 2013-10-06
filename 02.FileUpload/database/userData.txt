@@ -1,0 +1,2 @@
+user<EOF>qwerty<EOF>User
+stefka<EOF>parola<EOF>Stefka

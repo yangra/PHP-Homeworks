@@ -49,17 +49,17 @@ echo '<div class="sort">
 $group = (!empty($_POST['group']) && (int) $_POST['group'] != 0) ? " WHERE msg_group=" . $_POST['group'] : "";
 
 $stmt_msg = mysqli_prepare($connection, "SELECT users.user_name,
-                                            messages.msg_id,
-                                            DATE_FORMAT(messages.msg_date, '%d.%m.%Y %H:%i:%s'),
-                                            messages.msg_title, 
-                                            messages.msg_text,
-                                            messages.msg_group
-                                        FROM messages 
-                                        INNER JOIN users 
-                                        ON messages.user_id=users.user_id 
-                                        " . $group . "
-                                        ORDER BY messages.msg_date " . $sort . " 
-                                        LIMIT ? OFFSET ?");
+                                                messages.msg_id,
+                                                DATE_FORMAT(messages.msg_date, '%d.%m.%Y %H:%i:%s'),
+                                                messages.msg_title, 
+                                                messages.msg_text,
+                                                messages.msg_group
+                                         FROM messages 
+                                         INNER JOIN users 
+                                         ON messages.user_id=users.user_id 
+                                         " . $group . "
+                                         ORDER BY messages.msg_date " . $sort . " 
+                                         LIMIT ? OFFSET ?");
 //if (!$stmt_msg) {
 //    exit;
 //}
@@ -89,9 +89,9 @@ if ($no_msgs) {
     echo '<p>Няма публикувани съобщения!</p>';
 }
 
-$count = 0;
-$query = mysqli_query($connection, "SELECT msg_group FROM messages" . $group);
-while ($row = $query->fetch_row()) {
+$query = mysqli_query($connection, "SELECT * FROM messages" . $group);
+$msgNum = $query->num_rows;
+for($count = 0; $count < $msgNum; $count++){
     if ($count % $perPage === 0) {
         if ($offset == $count) {
             echo '<div class="page">' . ($count / $perPage + 1) . '</div>';
@@ -99,7 +99,6 @@ while ($row = $query->fetch_row()) {
             echo '<div class="page"><a href="msgList.php?page=' . $count . '">' . ($count / $perPage + 1) . '</a></div>';
         }
     }
-    $count++;
 }
 include 'includes' . DIRECTORY_SEPARATOR . 'footer.php';
 ?>

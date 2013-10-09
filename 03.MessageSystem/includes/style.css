@@ -1,22 +1,80 @@
-/* 
-    Document   : style
-    Created on : Oct 4, 2013, 10:30:04 PM
-    Author     : Yana
-    Description:
-        Purpose of the stylesheet follows.
-*/
 .list {
-   padding-left: 400px; 
-   border: 1px solid green;
-   border-collapse:collapse;
-   width: 100%;
+   border: solid darkblue;
    text-align:center;
+   font-family: georgia;
+   border-style: outset;
+   width: 600px;
+   heigth: 40px;
+  
+
 }
 .error{
     color:red;
 }
 p.msg{
-   text-align: justify; 
+   margin-top: 0px;
+   margin-bottom: 5px;
+   font-family: georgia;
+   font-size: 14px;
+   text-align: justify;
+   border: 1px solid darkblue;
+   width: 600px;
+}
+p.title{
+   margin-bottom: 0px;
+   margin-top: 5px;
+   font-family: Georgia;
+   font-weight: 600;
+   font-size: 15px;
+   background-color: #f2f2f2;
+   text-align: center; 
+   text-shadow: 1px 1px activecaption;
+   border: 1px solid green;
+   width: 600px;
+}
+div.page{
+    margin-left:5px;
+    margin-right: 5px;
+    display: inline-block;
+}
+div.filter,
+div.sort{
+    display: inline-block;
+    margin-top:7px;
+    margin-left: 7px;
+}
+input.post{
+    
+    margin-left: 300px;
+    width:150px;
+}
+input[name="title"]{
+   width:450px; 
+   margin-left: 0px;
+}
+p.menu{
+    display: inline-block;
+    margin: 5px;
+}
+textarea.post{
+    height:400px;
+    width:450px;
+}
+#group1 
+{
+    background-color: #fcdfd2;  
+}
+#group2 
+{
+    background-color: #c5def0;
+}
+#group3 
+{
+    background-color: #fcfcd2;
+}
+#group4 
+{
+    background-color: #d2fcd2;
 }
 root { 
     display: block;

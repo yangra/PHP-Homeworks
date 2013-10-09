@@ -1,8 +1,7 @@
-
 <?php
 $pageTitle = 'Публикувай';
-include 'includes'.DIRECTORY_SEPARATOR.'header.php';
-require 'includes'.DIRECTORY_SEPARATOR.'constants.php';
+include 'includes' . DIRECTORY_SEPARATOR . 'header.php';
+
 if (!isset($_SESSION['isLogged'])) {
     header('Location: index.php');
     exit;
@@ -10,14 +9,22 @@ if (!isset($_SESSION['isLogged'])) {
 if ($_POST) {
     $title = mysqli_real_escape_string($connection, trim($_POST['title']));
     $msg = mysqli_real_escape_string($connection, trim($_POST['text']));
+    $group = $_POST['group'];
     $date = date('Y-m-d H:i:s');
     $error = false;
-    $query = mysqli_query($connection,"SELECT msg_title, msg_text FROM messages WHERE msg_title='".$title."' AND msg_text='".$msg."';");
+    $stmt_check = mysqli_prepare($connection,"SELECT msg_title, msg_text FROM messages WHERE msg_title= ? AND msg_text= ?;");
+    mysqli_stmt_bind_param($stmt_check, 'ss', $title, $msg);
+    mysqli_stmt_execute($stmt_check);
+    mysqli_stmt_bind_result($stmt_check, $msg_title, $msg_text);
     if (empty($title)|| empty($msg)) {
         $error = true;
         echo '<p class="error">Моля попълнете всички полета!</p>';
     }
-    if (mysqli_fetch_row($query)>0) {
+    if ($group==0) {
+        $error = true;
+        echo '<p class="error">Моля изберете група!</p>';
+    }
+    if (mysqli_stmt_fetch($stmt_check)) {
         $error = true;
         echo '<p class="error">Това съобщение е вече публикувано!</p>';
     }
@@ -31,28 +38,50 @@ if ($_POST) {
     }
     
     if (!$error) {
-        if (mysqli_query($connection,"INSERT INTO messages (user_id, msg_date, msg_title, msg_text)
-            VALUES ('".$_SESSION['user']."', '".$date."', '".$title."', '".$msg."');")) {
-          echo '<p>Успешна публикация</p>';  
-        } else  {
-            echo '<p class="error">Грешка при запис!</p>';
-            echo mysqli_error($connection);
+        $stmt_add = mysqli_prepare($connection, "INSERT INTO messages (user_id, msg_date, msg_title, msg_text,msg_group)
+                                                 VALUES (?, ?, ?, ?, ?);");
+        mysqli_stmt_bind_param($stmt_add, 'isssi', $_SESSION['user_id'], $date, $title, $msg, $group);
+
+        if (mysqli_stmt_execute($stmt_add)) {
+           header('Location: msgList.php');
+           exit; 
+        }  else {
+           echo '<p class="error">Грешка при запис!</p>';
         }
     }
 }
+
 ?>
 <form method="POST">
     <table>
         <tr>
-            <td><input type="text" name="title" placeholder="Заглавие" style="width:450px;"/></td>
+            <td><input class="post" type="text" value="
+<?php 
+echo (!empty($_POST['title']))?$_POST['title']:'';
+?>
+" placeholder="Заглавие" name="title" />
+            </td>
         </tr>
         <tr>
-            <td><textarea name ="text" placeholder="Напишете съобщението си тук..." style="width:450px;height:400px;"></textarea></td>
+            <td>
+                <textarea class="post" name ="text" placeholder="Напишете съобщението си тук..." >
+<?php 
+echo (!empty($_POST['text']))?$_POST['text']:'';
+?>
+</textarea>
+            </td>
         </tr>
         <tr>
-            <td><input type="submit" value="Публикувай"/></td>
+           <td>Моля изберете група: 
+<?php
+require 'includes/select.php';
+?>
+           </td>
         </tr>
-    </table> 
+        <tr>
+            <td><input class="post" type="submit" value="Публикувай"/></td>
+        </tr>
+    </table>    
 </form>
 <?php
 include 'includes'.DIRECTORY_SEPARATOR.'footer.php';

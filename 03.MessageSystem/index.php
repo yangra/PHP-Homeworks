@@ -1,20 +1,24 @@
 <?php
 $pageTitle = 'Вход';
-include 'includes'.DIRECTORY_SEPARATOR.'header.php';
-require 'includes'.DIRECTORY_SEPARATOR.'constants.php';
+include 'includes' . DIRECTORY_SEPARATOR . 'header.php';
+
 if (isset($_SESSION['isLogged'])) {
     header('Location: msgList.php');
     exit;
 }
+
 if ($_POST) {
-    $username = trim($_POST['user']);
-    $pass = trim($_POST['pass']);
-    $query = mysqli_query($connection,"SELECT user_id FROM users 
+    $username = mysqli_real_escape_string($connection, trim($_POST['user']));
+    $pass = mysqli_real_escape_string($connection, trim($_POST['pass']));
+    
+    $query = mysqli_query($connection,"SELECT user_id, user_name FROM users 
                             WHERE user_name='".$username."' AND user_pass='".$pass."'");
     if ($query->num_rows>0) {
         $user = $query->fetch_row();
         $_SESSION['isLogged'] = true;
-        $_SESSION['user'] = $user[0];
+        $_SESSION['user_id'] = $user[0];
+        $_SESSION['user_name'] = $user[1];
+        $_SESSION['sort'] = "DESC";
         header('Location: msgList.php');
         exit;
     }  else {

@@ -90,7 +90,7 @@ if ($no_msgs) {
 }
 
 $query = mysqli_query($connection, "SELECT * FROM messages" . $group);
-$msgNum = $query->num_rows;
+$msgNum = mysqli_num_rows($query);
 for($count = 0; $count < $msgNum; $count++){
     if ($count % $perPage === 0) {
         if ($offset == $count) {

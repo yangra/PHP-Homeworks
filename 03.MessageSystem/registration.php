@@ -25,6 +25,7 @@ if ($_POST) {
     $stmt_check = mysqli_prepare($connection, "SELECT user_name FROM users WHERE user_name= ? ");
     mysqli_stmt_bind_param($stmt_check,'s', $username);
     mysqli_stmt_execute($stmt_check);
+    
     if (mysqli_stmt_fetch($stmt_check)) {
         echo '<p class="error" >Потребителското име е заето!</p>';
         $error = true;

@@ -13,8 +13,8 @@ if ($_POST) {
     
     $query = mysqli_query($connection,"SELECT user_id, user_name FROM users 
                             WHERE user_name='".$username."' AND user_pass='".$pass."'");
-    if ($query->num_rows>0) {
-        $user = $query->fetch_row();
+    if (mysqli_num_rows($query)>0) {
+        $user = mysqli_fetch_row($query);
         $_SESSION['isLogged'] = true;
         $_SESSION['user_id'] = $user[0];
         $_SESSION['user_name'] = $user[1];
